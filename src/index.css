@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "mono", sans-serif;
+}
+
+:root {
+  --color-blue: #e8f9ff60;
+  --color-dark-blue: #1c458c;
+  --primary: #00aeef;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  /* overflow: hidden; */
+  background: lightpink;
+}
+.customOverlay {
+  backdrop-filter: blur(15px);
+}
+
+.customModal {
+  max-width: 500px;
+  border-radius: 10px;
+  width: 100%;
+}
+@keyframes customEnterOverlayAnimation {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes customLeaveOverlayAnimation {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes customEnterModalAnimation {
+  0% {
+    transform: scale(0.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes customLeaveModalAnimation {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.2);
+  }
+}
+
+#my-tooltip {
+  max-width: 350px;
+  border-radius: 10px;
+  text-align: justify;
+}
+
