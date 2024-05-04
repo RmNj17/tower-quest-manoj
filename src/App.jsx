@@ -1,9 +1,9 @@
+import { Toaster } from "react-hot-toast";
 import TowerQuestBase from "./pages/TowerQuestBase";
-import DialogBox from "./components/Modal/dialogBox";
 function App() {
   return (
     <>
-     <DialogBox />
+      <Toaster position="top-center"/>
       <TowerQuestBase />
     </>
   );

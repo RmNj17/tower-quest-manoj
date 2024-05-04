@@ -6,7 +6,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "mono", sans-serif;
+  font-family: monospace;
 }
 
 :root {
@@ -67,8 +67,9 @@ body {
 }
 
 #my-tooltip {
-  max-width: 350px;
+  max-width: 400px;
+  font-size: 13px;
   border-radius: 10px;
   text-align: justify;
+  font-family: monospace;
 }
-
