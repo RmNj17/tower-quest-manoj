@@ -72,4 +72,11 @@ body {
   border-radius: 10px;
   text-align: justify;
   font-family: monospace;
+  z-index: 1000;
+}
+
+@media only screen and (max-width: 768px) {
+  #my-tooltip {
+    max-width: 260px;
+  }
 }

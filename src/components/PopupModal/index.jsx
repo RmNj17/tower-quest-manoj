@@ -10,7 +10,7 @@ const DialogBox = ({ setDifficultyLevel, setGameStarted }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth <= 768);
     };
 
     handleResize();
@@ -47,29 +47,30 @@ const DialogBox = ({ setDifficultyLevel, setGameStarted }) => {
         }}
         styles={{
           modal: {
-            width: isMobile ? "90%" : "auto",
+            width: "auto",
             maxWidth: isMobile ? "unset" : "500px",
           },
         }}
       >
-        <h2 className="text-lg text-[#00aeef] font-mono flex items-center justify-center gap-2">
-          Hello there, Lets begin to play{" "}
+        <h2 className="text-lg text-[#00aeef] font-mono flex items-center justify-center gap-2 flex-col md:flex-row lg:flex-row">
+          <span className="text-center">Hello there, Lets begin to play</span>{" "}
           <span className="font-bold font-mono">Tower Quest</span>{" "}
           <IoIosInformationCircle
             data-tooltip-id="my-tooltip"
             data-tooltip-variant="info"
-            data-tooltip-content="Tower Quest features eight floors, each with a set number of boxes. Players begin at the bottom floor and select a box. If you uncover a gem, you advance to the next floor; if you reveal a bomb, the game ends. The goal is to ascend to the top floor by selecting gems while avoiding bombs."
+            data-tooltip-content="Tower Quest features eight floors, each with a set number of boxes. Players begin at the  floor 1 and select a box. If you uncover a gem, you advance to the next floor; if you reveal a bomb, the game resets to the beginning until your points become zero. The goal is to ascend to the top floor by selecting gems while avoiding bombs."
             size={20}
             className="cursor-pointer"
           />
         </h2>
         <p className="text-center my-3 text-black font-mono italic text-xs font-bold">
-         You have 50 points out of which 20 points will be deducted to activate the game. 
+          You have 50 points out of which 20 points will be deducted to activate
+          the game.
         </p>
         <p className="text-center my-3 text-black font-mono">
           Please choose the difficulty level
         </p>
-        <div className="flex flex-wrap justify-center font-mono">
+        <div className="flex flex-wrap justify-center font-mono flex-col md:flex-row lg:flex-row">
           <button
             onClick={() => handleDifficultyLevelSelect("normal")}
             className="bg-blue-300 hover:bg-blue-400 text-white py-2 px-4 rounded m-2"

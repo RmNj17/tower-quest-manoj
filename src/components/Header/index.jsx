@@ -12,13 +12,13 @@ const Header = ({ difficultyLevel }) => (
       <IoIosInformationCircle
         data-tooltip-id="my-tooltip"
         data-tooltip-variant="info"
-        data-tooltip-content="Tower Quest features eight floors, each with a set number of boxes. Players begin at the bottom floor and select a box. If you uncover a gem, you advance to the next floor; if you reveal a bomb, the game ends. The goal is to ascend to the top floor by selecting gems while avoiding bombs."
+        data-tooltip-content="Tower Quest features eight floors, each with a set number of boxes. Players begin at the  floor 1 and select a box. If you uncover a gem, you advance to the next floor; if you reveal a bomb, the game resets to the beginning until your points become zero. The goal is to ascend to the top floor by selecting gems while avoiding bombs."
         size={20}
         className="cursor-pointer"
       />
     </div>
     {difficultyLevel && (
-      <div className="text-sm mb-4 flex items-center gap-2">
+      <div className="text-sm mb-4 flex items-center justify-center gap-2">
         Difficulty Level:{" "}
         {difficultyLevel.charAt(0).toUpperCase() + difficultyLevel.slice(1)}
         <CiCircleQuestion

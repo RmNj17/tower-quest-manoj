@@ -5,6 +5,9 @@ import Header from "../../components/Header";
 import loseSound from "../../assets/lose.m4a";
 import winSound from "../../assets/win.m4a";
 import { toast } from "react-hot-toast";
+import Footer from "../../components/Footer";
+import AutoPlayControls from "../../components/Autoplay";
+import Message from "../../components/Message";
 
 const Game = () => {
   const [gameStarted, setGameStarted] = useState(false);
@@ -15,7 +18,6 @@ const Game = () => {
   const [currentFloor, setCurrentFloor] = useState(1);
   const [autoPlay, setAutoPlay] = useState(false);
   const [roundsToPlay, setRoundsToPlay] = useState(5);
-  const [maxRounds, setMaxRounds] = useState(5);
   const [points, setPoints] = useState(50);
   const loseSoundRef = useRef(new Audio(loseSound));
   const winSoundRef = useRef(new Audio(winSound));
@@ -28,8 +30,10 @@ const Game = () => {
         newBoxesPerFloor = 4;
         break;
       case "medium":
+        newBoxesPerFloor = 3;
         break;
       case "hard":
+        newBoxesPerFloor = 3;
         break;
       case "impossible":
         newBoxesPerFloor = 4;
@@ -40,13 +44,6 @@ const Game = () => {
     setTotalFloors(newTotalFloors);
     setBoxesPerFloor(newBoxesPerFloor);
   }, [difficultyLevel]);
-
-  useEffect(() => {
-    setMaxRounds(totalFloors - currentFloor + 1);
-    if (roundsToPlay > totalFloors - currentFloor + 1) {
-      setRoundsToPlay(totalFloors - currentFloor + 1);
-    }
-  }, [currentFloor, totalFloors]);
 
   useEffect(() => {
     if (gameStatus === "lost") {
@@ -65,32 +62,11 @@ const Game = () => {
     }
   }, [gameStatus]);
 
-  useEffect(() => {
-    if (autoPlay && roundsToPlay > 0 && gameStatus === "playing") {
-      const timeout = setTimeout(() => {
-        handleBoxClick(currentFloor - 1);
-        setRoundsToPlay(roundsToPlay - 1);
-        if (roundsToPlay === 1) {
-          setAutoPlay(false);
-        }
-      }, 1000);
-      return () => clearTimeout(timeout);
-    }
-  }, [autoPlay, roundsToPlay, gameStatus, currentFloor]);
-
-  const handleBoxClick = (floorIndex) => {
+  const handleBoxClick = (floorIndex, boxValue) => {
     if (gameStatus !== "playing" || floorIndex + 1 !== currentFloor) return;
     toast.dismiss();
-    const gemProbability = {
-      normal: 0.8,
-      medium: 0.65,
-      hard: 0.35,
-      impossible: 0.1,
-    }[difficultyLevel];
 
-    const isGem = Math.random() < gemProbability;
-
-    if (isGem) {
+    if (boxValue === 1) {
       if (currentFloor === totalFloors) {
         setGameStatus("won");
         setAutoPlay(false);
@@ -98,51 +74,82 @@ const Game = () => {
         setCurrentFloor(currentFloor + 1);
         switch (difficultyLevel) {
           case "normal":
-            toast("Good job!", {
-              icon: "💎",
-            });
+            toast("You've found 💎");
             setBoxesPerFloor(4);
-            setPoints(points + 5);
+            setPoints(points + 10);
             break;
           case "medium":
-            toast("Good job!", {
-              icon: "💎",
-            });
+            toast("You've found 💎");
+            setBoxesPerFloor(3);
             setPoints(points + 10);
             break;
           case "hard":
-            toast("Good job!", {
-              icon: "💎",
-            });
-            setPoints(points + 30);
+            toast("You've found 💎");
+            setBoxesPerFloor(3);
+            setPoints(points + 5);
             break;
           case "impossible":
-            toast("Good job!", {
-              icon: "💎",
-            });
+            toast("You've found 💎");
             setBoxesPerFloor(4);
-            setPoints(points + 50);
+            setPoints(points + 5);
             break;
           default:
             break;
         }
       }
     } else {
-      setPoints(points - 5);
-      if (points - 5 <= 0) {
+      setPoints(points - 15);
+      if (points - 15 <= 0) {
         setGameStatus("lost");
         setAutoPlay(false);
       } else {
-        toast("Ops! That's a bomb", {
+        toast("Ops! That's a bomb 😭", {
           icon: "💣",
         });
         setGameStatus("playing");
         setCurrentFloor(1);
-        setAutoPlay(false);
         setRoundsToPlay(5);
       }
     }
   };
+
+  useEffect(() => {
+    if (autoPlay && roundsToPlay > 0 && gameStatus === "playing") {
+      const timeout = setTimeout(() => {
+        let boxValue;
+        switch (difficultyLevel) {
+          case "normal":
+            boxValue = Math.random() < 0.95 ? 1 : 0;
+            break;
+          case "medium":
+            boxValue = Math.random() < 0.75 ? 1 : 0;
+            break;
+          case "hard":
+            boxValue = Math.random() < 0.55 ? 1 : 0;
+            break;
+          case "impossible":
+            boxValue = Math.random() < 0.15 ? 1 : 0;
+            break;
+          default:
+            boxValue = Math.random() < 0.5 ? 0 : 1;
+            break;
+        }
+        handleBoxClick(currentFloor - 1, boxValue);
+        setRoundsToPlay(roundsToPlay - 1);
+        if (roundsToPlay === 1 || gameStatus !== "playing") {
+          setAutoPlay(false);
+        }
+      }, 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [
+    autoPlay,
+    roundsToPlay,
+    gameStatus,
+    currentFloor,
+    handleBoxClick,
+    difficultyLevel,
+  ]);
 
   const handleStartAutoPlay = () => {
     if (roundsToPlay > 0 && gameStatus === "playing") {
@@ -154,8 +161,14 @@ const Game = () => {
     setAutoPlay(false);
   };
 
-  const handleReload = () => {
+  const handleChangeDifficulty = () => {
     window.location.reload();
+  };
+
+  const handleRestart = () => {
+    setGameStatus("playing");
+    setCurrentFloor(1);
+    setPoints(30);
   };
 
   const handleGameActivation = () => {
@@ -177,7 +190,7 @@ const Game = () => {
         />
       )}
       {gameStarted && (
-        <>
+        <div className="shadow-2xl p-6 rounded-lg">
           <Header difficultyLevel={difficultyLevel} />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
             {Array.from({ length: totalFloors }).map(
@@ -189,64 +202,33 @@ const Game = () => {
                     currentFloor={currentFloor}
                     boxesPerFloor={boxesPerFloor}
                     handleBoxClick={handleBoxClick}
+                    difficulty={difficultyLevel}
                   />
                 )
             )}
           </div>
           {gameStatus === "won" && (
             <div className="text-xl text-green-600">
-              Congratulations! You reached the top!
+              Congratulations! You've reached the top!
             </div>
           )}
-          {gameStatus === "lost" && (
-            <div className="text-xl text-red-600">
-              Game Over! You lost all your points.
-            </div>
-          )}
-          {gameStatus === "playing" && (
-            <div className="flex flex-col gap-2 sm:flex-row justify-center items-center mt-4">
-              <button
-                onClick={handleStartAutoPlay}
-                className={`bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 rounded ${
-                  roundsToPlay > 0 && gameStatus === "playing"
-                    ? ""
-                    : "bg-gray-400 cursor-not-allowed"
-                }`}
-                disabled={roundsToPlay === 0 || gameStatus !== "playing"}
-              >
-                Start Auto-Play ({roundsToPlay ? roundsToPlay : ""} rounds left)
-              </button>
-              {autoPlay && (
-                <button
-                  onClick={handleStopAutoPlay}
-                  className="ml-4 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-                >
-                  Stop Auto-Play
-                </button>
-              )}
-              <input
-                type="number"
-                min="1"
-                max={maxRounds}
-                value={roundsToPlay}
-                onChange={(e) => setRoundsToPlay(parseInt(e.target.value))}
-                className="ml-4 border-gray-300 rounded-md p-2 text-center w-20"
-              />
-              <span className="ml-2">rounds</span>
-            </div>
-          )}
-          <div className="flex gap-4 mt-4">
-            {!["playing"].includes(gameStatus) && (
-              <button
-                onClick={handleReload}
-                className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
-              >
-                Restart again
-              </button>
-            )}
-          </div>
-          <div className="text-lg mt-3">Remaining Points: {points}</div>
-        </>
+          <Message gameStatus={gameStatus} difficultyLevel={difficultyLevel} />
+          <AutoPlayControls
+            handleStartAutoPlay={handleStartAutoPlay}
+            handleStopAutoPlay={handleStopAutoPlay}
+            roundsToPlay={roundsToPlay}
+            setRoundsToPlay={setRoundsToPlay}
+            autoPlay={autoPlay}
+            gameStatus={gameStatus}
+          />
+          <Footer
+            gameStatus={gameStatus}
+            handleRestart={handleRestart}
+            handleChangeDifficulty={handleChangeDifficulty}
+            points={points}
+            difficultyLevel={difficultyLevel}
+          />
+        </div>
       )}
     </div>
   );
