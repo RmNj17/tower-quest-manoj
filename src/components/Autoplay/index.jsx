@@ -8,7 +8,7 @@ const AutoPlayControls = ({
 }) => {
   return (
     gameStatus === "playing" && (
-      <div className="flex flex-col sm:flex-row justify-center items-center mt-5 -mb-4">
+      <div className="flex flex-col sm:flex-row gap-2 justify-center items-center mt-5 -mb-4">
         <button
           onClick={handleStartAutoPlay}
           className={`bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 rounded ${
