@@ -9,12 +9,6 @@
   font-family: monospace;
 }
 
-:root {
-  --color-blue: #e8f9ff60;
-  --color-dark-blue: #1c458c;
-  --primary: #00aeef;
-}
-
 html {
   scroll-behavior: smooth;
 }
@@ -79,4 +73,28 @@ body {
   #my-tooltip {
     max-width: 260px;
   }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  cursor: pointer;
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, lightpink, lightgreen);
+  cursor: pointer;
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, lightgreen, lightpink);
+  cursor: pointer;
+  scroll-behavior: smooth;
 }

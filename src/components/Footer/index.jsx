@@ -4,7 +4,6 @@ const Footer = ({
   points,
   handleChangeDifficulty,
 }) => {
-  // Display points as 0 if it's negative
   const displayPoints = points < 0 ? 0 : points;
 
   return (
