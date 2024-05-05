@@ -42,6 +42,16 @@ const Floor = ({
   }, [boxesPerFloor, currentFloor, initialRandomization, bombSelected]);
 
   useEffect(() => {
+    const audio = new Audio(SuccessSound);
+    audio.preload = "auto";
+
+    return () => {
+      audio.pause();
+      audio.src = "";
+    };
+  }, []);
+
+  useEffect(() => {
     if (currentFloor > floorIndex + 1) {
       const audio = new Audio(SuccessSound);
       audio.play();
