@@ -16,7 +16,7 @@ const Message = ({ gameStatus, difficultyLevel }) => {
       case "medium":
         return (
           <div className="text-sm font-extrabold text-green-600">
-            You have been listed in the top 50% players have completed this
+            You have been listed in the top 50% players who have completed this
             level
           </div>
         );
